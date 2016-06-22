@@ -1,0 +1,6 @@
+sso_cert
+sso_key
+*.xml
+idp_conf.py
+*.pyc
+env
