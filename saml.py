@@ -1,10 +1,12 @@
 import urllib
 import base64
+from urlparse import parse_qsl, urlsplit
 from zlib import decompress, compress
 from xml.dom.minidom import parseString
 from lxml import etree
 from saml2.server import Server
 from defusedxml.ElementTree import fromstring
+from saml2.sigver import extract_rsa_key_from_x509_cert, RSACrypto, verify_redirect_signature
 
 def base64_decode(encoded_XML):
     print '\nDecoding base64...\n'
@@ -68,3 +70,18 @@ def is_safe_xml(text):
         print(e)
         return False
     return True
+
+def verify_signature(url, cert='/home/ashima/Rackspace/astra-service-providers/dev_ssl/sso_cert'):
+    try:
+        cert = open(cert, 'r').read().splitlines(True) # cert is path to certfile
+        cert = ''.join(cert[1:-1]) # Remove begin cert and end cert lines
+    except IOError:
+        pass # cert is the certificate
+    else:
+        print(cert)
+
+    crypto = RSACrypto('dummy key') # The key is not required in this case
+
+    saml_msg = dict(parse_qsl(urlsplit(url).query))
+
+    return verify_redirect_signature(saml_msg, crypto, cert=cert)
