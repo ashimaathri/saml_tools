@@ -4,3 +4,5 @@ sso_key
 idp_conf.py
 *.pyc
 env
+pki
+test_files
