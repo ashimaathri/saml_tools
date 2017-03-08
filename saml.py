@@ -50,9 +50,6 @@ def decode_request(saml_request):
 def encode_request(saml_request):
     return url_encode(base64_encode(deflate(saml_request)))
 
-def create_IdP():
-    return Server('idp_conf')
-
 def unpretty_xml(xml_str):
     parser = etree.XMLParser(remove_blank_text=True)
     elem = etree.XML(xml_str, parser=parser)
